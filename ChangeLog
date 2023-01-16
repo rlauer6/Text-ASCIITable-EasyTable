@@ -1,0 +1,11 @@
+Mon Jan 16 09:39:25 2023  Rob Lauer  <rlauer6@comcast.net>
+
+	[BigBang]:
+	* ChangeLog: new
+	* README.md
+	* requires: new
+	* lib/Text/ASCIoITable/EasyTable.pm: new
+	* Makefile: new
+	* .gitignore: new
+	* t/00-easy-table.t: new
+	* test-reqquires: new

@@ -45,12 +45,15 @@ often. Although, it is quite easy to use already I thought it could
 easier.
 
 Easily create ASCII tables using [Text::ASCIITable](https://metacpan.org/pod/Text%3A%3AASCIITable) from arrays of
-hashes.  Custom columns names can be sent to set the order of the data
-to be displayed in the table. You can also setup an array of
-subroutines that transform each element of the hash prior to insertion
-into the table. Rows can be ordered by one of the keys in the hash or
-you can provide a custom sort routine that will be called prior to
-rendering the table.
+hashes.  Custom columns names (instead of the key names) can be
+defined that allow you to set the order of the data to be displayed in
+the table. Use an array of subroutines to transform each element of
+the hash prior to insertion into the table. Rows can be sorted by one
+of the keys in the hash or you can provide a custom sort routine that
+will be called prior to rendering the table.
+
+Instead of rendering a table, `easy_table` can apply the same type of
+transformations to arrays of hashes and subsequently output JSON.
 
 Exports one method `easy_table`. 
 
@@ -82,14 +85,61 @@ Exports one method `easy_table`.
     _`rows` is an array, not a hash in order to preserve
     the order of the columns._
 
-- data
-
-    Array of hashes that contain the data for the table.
-
 - columns
 
     Array of column names that represent both the keys that will be used to
     extract data from the hash for each row and the labels for each column.
+
+- data
+
+    Array of hashes that contain the data for the table.
+
+- json
+
+    Instead of a table, return a JSON representation. The point here, is
+    to use the transformation capabilities but rather than rendering a
+    table, output JSON. Using this option you can transform the keys or
+    the values of arrays of hashes using the same techniques you would use
+    to transform the column names and column values in a table.
+
+        my $data = [
+          { col1 => 'foo', col2 => 'bar' },
+          { col1 => 'biz', col2 => 'buz' },
+          { col1 => 'fuz', col2 => 'biz' },
+        ];
+        
+        my %index = ( ImageId => 'col1', Name => 'col2' );
+
+        # dumb example, but the point is to transform 'some' of the data
+        # in a non-trivial way
+        my $rows = [
+          ImageId => sub { uc shift->{ $index{ shift() } } },
+          Name    => sub { uc shift->{ $index{ shift() } } },
+        ];
+        
+        print easy_table(
+          json => 1,
+          data => $data,
+          rows => $rows,
+        );
+
+        [
+           {
+              "ImageId" : "foo",
+              "Name" : "bar"
+           },
+           {
+              "Name" : "buz",
+              "ImageId" : "biz"
+           },
+           {
+              "ImageId" : "fuz",
+              "Name" : "biz"
+           }
+        ]
+
+    - _`easy_table()` is meant to be used on small data sets and may not
+    be efficient when larger data sets are used._
 
 - sort\_key
 
@@ -103,7 +153,7 @@ Exports one method `easy_table`.
 
 _If neither `rows` or `columns` is provided, the keys are assumed
 to be the column names. In that case the order in which the columns
-appear will be non-determistic. If you want a specific order, provide
+appear will be non-deterministic. If you want a specific order, provide
 the `columns` or `rows` parameters. If you just want to see some
 data and don't care about order, you can just send the `data`
 parameter and the method will more or less DWIM._
@@ -115,3 +165,8 @@ parameter and the method will more or less DWIM._
 # AUTHOR
 
 Rob Lauer - <rlauer6@comcast.net>>
+
+# LICENSE AND COPYRIGHT
+
+This module is free software. It may be used, redistributed and/or
+modified under the same terms as Perl itself.

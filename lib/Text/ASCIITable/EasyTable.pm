@@ -3,16 +3,17 @@ package Text::ASCIITable::EasyTable;
 use strict;
 use warnings;
 
-use Text::ASCIITable;
-use Scalar::Util qw(reftype);
-use List::Util qw(pairs);
 use Data::Dumper;
+use JSON;
+use List::Util qw(pairs);
+use Scalar::Util qw(reftype);
+use Text::ASCIITable;
 
 use parent qw(Exporter);
 
-our @EXPORT = qw(easy_table);
+our @EXPORT = qw(easy_table); ## no critic (ProhibitAutomaticExportation)
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 ########################################################################
 sub is_array { push @_, 'ARRAY'; goto &_is_type; }
@@ -31,21 +32,7 @@ sub easy_table {
   die "'data' must be ARRAY\n"
     if !is_array $options{data};
 
-  my @data = @{ $options{data} };
-
-  my $table_options = $options{table_options};
-  $table_options //= {};
-
-  die "'table_options' must be HASH\n"
-    if !is_hash $table_options;
-
-  $table_options->{headingText} //= 'Table';
-
-  # build a table...
-  my $t = Text::ASCIITable->new($table_options);
-
   my @columns;
-  my %rows;
 
   if ( $options{columns} ) {
     die "'columns' must be an ARRAY\n"
@@ -60,49 +47,107 @@ sub easy_table {
     die "'rows' must be key/value pairs\n"
       if @{ $options{rows} } % 2;
 
-    %rows = @{ $options{rows} };
-
     @columns = map { $_->[0] } pairs @{ $options{rows} };
   }
   else {
-    @columns = keys %{ $data[0] };
+    @columns = keys %{ $options{data}->[0] };
   }
 
-  $t->setCols(@columns);
+  $options{columns} = \@columns;
 
-  my $sort_key = $options{sort_key};
+  my $data = _render_data(
+    data     => $options{data},
+    rows     => $options{rows},
+    columns  => \@columns,
+    sort_key => $options{sort_key},
+  );
 
-  if ($sort_key) {
-    if ( reftype($sort_key) eq 'CODE' ) {
-      @data = $sort_key->(@data);
-    }
-    else {
-      @data = sort { lc $a->{$sort_key} cmp lc $b->{$sort_key} } @data;
-    }
+  return _render_table( %options, data => $data )
+    if !$options{json};
+
+  # return an array of hashes
+  my @json_data;
+
+  foreach my $row ( @{$data} ) {
+    my %hashed_row = map { $_ => shift @{$row} } @columns;
+    push @json_data, \%hashed_row;
   }
 
-  for my $row (@data) {
-    if ( $options{rows} ) {
-      $t->addRow(
-        map {
-          ref $rows{$_}
-            && reftype( $rows{$_} ) eq 'CODE' ? $rows{$_}->( $row, $_ )
-            : $rows{$_}                       ? $row->{ $rows{$_} }
-            : $row->{$_}
-        } @columns
-      );
-    }
-    else {
-      $t->addRow( @{$row}{@columns} );
-    }
+  return JSON->new->pretty->encode( \@json_data );
+}
+
+########################################################################
+sub _render_table {
+########################################################################
+  my (%options) = @_;
+
+  # build a table...
+  my $table_options = $options{table_options};
+  $table_options //= {};
+
+  die "'table_options' must be HASH\n"
+    if !is_hash $table_options;
+
+  $table_options->{headingText} //= 'Table';
+
+  my $t = Text::ASCIITable->new($table_options);
+
+  $t->setCols( @{ $options{columns} } );
+
+  for ( @{ $options{data} } ) {
+    $t->addRow( @{$_} );
   }
 
   return $t;
 }
 
-1;
+########################################################################
+sub _render_data {
+########################################################################
+  my (%options) = @_;
 
-__END__
+  my ( $data, $rows, $columns, $sort_key )
+    = @options{qw(data rows columns sort_key)};
+
+  my @sorted_data;
+
+  if ($sort_key) {
+    if ( reftype($sort_key) eq 'CODE' ) {
+      @sorted_data = $sort_key->( @{$data} );
+    }
+    else {
+      @sorted_data
+        = sort { lc $a->{$sort_key} cmp lc $b->{$sort_key} } @{$data};
+    }
+  }
+  else {
+    @sorted_data = @{$data};
+  }
+
+  my %row_lu = $rows ? @{$rows} : ();
+
+  my @rendered_data;
+
+  for my $row ( @{$data} ) {
+    if ($rows) {
+      push @rendered_data, [
+        map {
+          ref $row_lu{$_}
+            && reftype( $row_lu{$_} ) eq 'CODE' ? $row_lu{$_}->( $row, $_ )
+            : $row_lu{$_}                       ? $row->{ $row_lu{$_} }
+            : $row->{$_}
+        } @{$columns},
+      ];
+    }
+    else {
+      push @rendered_data, [ @{$row}{ @{$columns} } ];
+    }
+  }
+
+  return \@rendered_data;
+}
+
+1;
 
 ## no critic (RequirePodSections)
 
@@ -157,12 +202,15 @@ often. Although, it is quite easy to use already I thought it could
 easier.
 
 Easily create ASCII tables using L<Text::ASCIITable> from arrays of
-hashes.  Custom columns names can be sent to set the order of the data
-to be displayed in the table. You can also setup an array of
-subroutines that transform each element of the hash prior to insertion
-into the table. Rows can be ordered by one of the keys in the hash or
-you can provide a custom sort routine that will be called prior to
-rendering the table.
+hashes.  Custom columns names (instead of the key names) can be
+defined that allow you to set the order of the data to be displayed in
+the table. Use an array of subroutines to transform each element of
+the hash prior to insertion into the table. Rows can be sorted by one
+of the keys in the hash or you can provide a custom sort routine that
+will be called prior to rendering the table.
+
+Instead of rendering a table, C<easy_table> can apply the same type of
+transformations to arrays of hashes and subsequently output JSON.
 
 Exports one method C<easy_table>. 
 
@@ -202,14 +250,65 @@ into table.
 I<C<rows> is an array, not a hash in order to preserve
 the order of the columns.>
 
-=item data
-
-Array of hashes that contain the data for the table.
-
 =item columns
 
 Array of column names that represent both the keys that will be used to
 extract data from the hash for each row and the labels for each column.
+
+=item data
+
+Array of hashes that contain the data for the table.
+
+=item json
+
+Instead of a table, return a JSON representation. The point here, is
+to use the transformation capabilities but rather than rendering a
+table, output JSON. Using this option you can transform the keys or
+the values of arrays of hashes using the same techniques you would use
+to transform the column names and column values in a table.
+
+ my $data = [
+   { col1 => 'foo', col2 => 'bar' },
+   { col1 => 'biz', col2 => 'buz' },
+   { col1 => 'fuz', col2 => 'biz' },
+ ];
+ 
+ my %index = ( ImageId => 'col1', Name => 'col2' );
+
+ # dumb example, but the point is to transform 'some' of the data
+ # in a non-trivial way
+ my $rows = [
+   ImageId => sub { uc shift->{ $index{ shift() } } },
+   Name    => sub { uc shift->{ $index{ shift() } } },
+ ];
+ 
+ print easy_table(
+   json => 1,
+   data => $data,
+   rows => $rows,
+ );
+
+ [
+    {
+       "ImageId" : "foo",
+       "Name" : "bar"
+    },
+    {
+       "Name" : "buz",
+       "ImageId" : "biz"
+    },
+    {
+       "ImageId" : "fuz",
+       "Name" : "biz"
+    }
+ ]
+
+=over 5
+
+=item * I<C<easy_table()> is meant to be used on small data sets and may not
+be efficient when larger data sets are used.>
+
+=back
 
 =item sort_key
 
@@ -225,7 +324,7 @@ Same options as those supported by L<Text::ASCIITable>.
 
 I<If neither C<rows> or C<columns> is provided, the keys are assumed
 to be the column names. In that case the order in which the columns
-appear will be non-determistic. If you want a specific order, provide
+appear will be non-deterministic. If you want a specific order, provide
 the C<columns> or C<rows> parameters. If you just want to see some
 data and don't care about order, you can just send the C<data>
 parameter and the method will more or less DWIM.>
@@ -237,5 +336,10 @@ L<Text::ASCIITable>, L<Term::ANSIColor>
 =head1 AUTHOR
 
 Rob Lauer - <rlauer6@comcast.net>>
+
+=head1 LICENSE AND COPYRIGHT
+
+This module is free software. It may be used, redistributed and/or
+modified under the same terms as Perl itself.
 
 =cut

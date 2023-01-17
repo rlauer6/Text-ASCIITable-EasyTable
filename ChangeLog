@@ -1,3 +1,16 @@
+Tue Jan 17 04:29:10 2023  Rob Lauer  <rlauer6@comcast.net>
+
+	[0.02]:
+	* NEWS.md: new
+	* requires: List::Util 1.29
+	* lib/Text/ASCIITable/EasyTable.pm
+	- refactor to use _render_data() method
+	- support to outputting JSON
+	- pod updates
+	(_render_table): new
+	(_render_data): new
+	* Makefile: remove commented out lines
+
 Mon Jan 16 09:39:25 2023  Rob Lauer  <rlauer6@comcast.net>
 
 	[BigBang]:

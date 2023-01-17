@@ -7,9 +7,6 @@ PERL_MODULES = \
 
 DESCRIPTION = "Create ASCII tables easily"
 
-#PERL_SCRIPTS = \
-#    bin/scandeps-static.pl
-
 UNIT_TESTS = \
 	t/00-easy-table.t
 

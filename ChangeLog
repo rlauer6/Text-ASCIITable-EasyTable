@@ -1,3 +1,10 @@
+Wed Jan 25 13:29:42 2023  Rob Lauer  <rlauer@usgn.net>
+
+	[0.03]:
+	* requires: +JSON
+	* lib/Text/ASCIITable/EasyTable.pm
+	- added max_rows option
+
 Tue Jan 17 04:29:10 2023  Rob Lauer  <rlauer6@comcast.net>
 
 	[0.02]:

@@ -141,6 +141,10 @@ Exports one method `easy_table`.
     - _`easy_table()` is meant to be used on small data sets and may not
     be efficient when larger data sets are used._
 
+- max\_rows
+
+    Maximum number of rows to render.
+
 - sort\_key
 
     Key in the hash to use for sorting the array prior to rendering.  If

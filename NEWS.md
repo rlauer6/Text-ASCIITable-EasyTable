@@ -7,6 +7,31 @@ previous versions.  If critical bugs are found in any of the software,
 notice of such bugs and the versions in which they were fixed will be
 noted here, as well.
 
+# Text-ASCIITable-EasyTable 1.001 (2023-01-26)
+
+This version fixes version numbering and some minor tweaks to the
+documentation.
+
+## Enhancements
+
+* pod tweaks for clarity
+
+## Fixes
+
+* fix module versioning
+
+# Text-ASCIITable-EasyTable 0.03 (2023-01-25)
+
+This version introduces a `max_rows` option.
+
+## Enhancements
+
+* new `max_rows` option to limit number of rows rendered
+
+## Fixes
+
+* requires JSON
+
 # Text-ASCIITable-EasyTable 0.02 (2023-01-17)
 
 Fixes unit tests on platforms that have older versions of

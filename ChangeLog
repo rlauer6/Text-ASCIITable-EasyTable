@@ -1,4 +1,13 @@
-Wed Jan 25 13:29:42 2023  Rob Lauer  <rlauer@usgn.net>
+Thu Jan 26 07:57:38 2023  Rob Lauer  <rlauer6@comcast.net>
+
+	[1.001]:
+	* README.md: generated
+	* lib/Text/ASCIITable/EasyTable.pm
+	- pod tweaks, version number
+	* resources: new
+	* Makefile: -H - PROJECT_HOME
+
+Wed Jan 25 13:29:42 2023  Rob Lauer  <rlauer6@comcast.net>>
 
 	[0.03]:
 	* requires: +JSON

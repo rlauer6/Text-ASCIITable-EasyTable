@@ -1,6 +1,6 @@
 # NAME
 
-Text::ASCIITable::EasyTable - create ASCII tables from hashes
+Text::ASCIITable::EasyTable - create ASCII tables from an array of hashes
 
 # SYNOPSIS
 
@@ -38,21 +38,21 @@ Text::ASCIITable::EasyTable - create ASCII tables from hashes
 
 # DESCRIPTION
 
-[Text::ASCIITable](https://metacpan.org/pod/Text%3A%3AASCIITable) is one of my favorite modules when I am writing
-command line scripts that sometimes need to output data. It's so
-useful that I wanted to encourage myself to use it more
-often. Although, it is quite easy to use already I thought it could
-easier.
+[Text::ASCIITable](https://metacpan.org/pod/Text%3A%3AASCIITable) is one of my favorite modules when I'm writing
+command line scripts that sometimes need to output data in tabular
+format. It's so useful that I wanted to encourage myself to use it
+more often. Although, it is quite easy to use already I thought it
+could be easier.
 
-Easily create ASCII tables using [Text::ASCIITable](https://metacpan.org/pod/Text%3A%3AASCIITable) from arrays of
-hashes.  Custom columns names (instead of the key names) can be
-defined that allow you to set the order of the data to be displayed in
-the table. Use an array of subroutines to transform each element of
-the hash prior to insertion into the table. Rows can be sorted by one
-of the keys in the hash or you can provide a custom sort routine that
-will be called prior to rendering the table.
+## Features
 
-Instead of rendering a table, `easy_table` can apply the same type of
+- Easily create ASCII tables using [Text::ASCIITable](https://metacpan.org/pod/Text%3A%3AASCIITable) from
+arrays of hashes.
+- Define custom columns names (instead of the key names) that
+also allow you to set the order of the data to be displayed in the table.
+- Transform each element of the hash prior to insertion into the table.
+- Sort rows by individual columns in the hashes
+- Output JSON instead of a tableInstead of rendering a table, `easy_table` can apply the same type of
 transformations to arrays of hashes and subsequently output JSON.
 
 Exports one method `easy_table`. 
@@ -87,7 +87,7 @@ Exports one method `easy_table`.
 
 - columns
 
-    Array of column names that represent both the keys that will be used to
+    Array of column names that can represent both the keys that will be used to
     extract data from the hash for each row and the labels for each column.
 
 - data

@@ -25,6 +25,7 @@ $(TARBALL): $(PERL_MODULES) $(PERL_SCRIPTS) requires
 	   -T test-requires \
 	   -t t/ \
 	   -d $(DESCRIPTION) \
+	   -H . \
 	   -D requires \
 	cp $$(ls -1rt *.tar.gz | tail -1) $@
 

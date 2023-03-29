@@ -23,14 +23,14 @@ Text::ASCIITable::EasyTable - create ASCII tables from an array of hashes
     print easy_table(
       data          => $data,
       rows          => $rows,
-      table_options => { headerText => 'My Easy Table' },
+      table_options => { headingText => 'My Easy Table' },
     );
 
     # easier 
     print easy_table(
       data          => $data,
       columns       => [ sort keys %{ $data->[0] } ],
-      table_options => { headerText => 'My Easy Table' },
+      table_options => { headingText => 'My Easy Table' },
     );
     
     # easiest 
@@ -144,6 +144,20 @@ Exports one method `easy_table`.
 - max\_rows
 
     Maximum number of rows to render.
+
+- fix\_headings
+
+    Many data sets will contain hash keys composed of lower case letters
+    in what is termed _snake case_ (words separated by '\_') or _camel
+    case_ (first letter of words in upper case). Set this to true to turn
+    snake and camel case into space separated 'ucfirst'ed words.
+
+    Example:
+
+        creation_date => Creation Date
+        IsTruncated   => Is Truncated
+
+    default: false
 
 - sort\_key
 

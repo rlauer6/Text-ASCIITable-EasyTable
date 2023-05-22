@@ -13,16 +13,11 @@ Text::ASCIITable::EasyTable - create ASCII tables from an array of hashes
     ];
 
     # easy
-    my %index = ( ImageId => 'col1', Name => 'col2' );
-
-    my $rows = [
-      ImageId => sub { shift->{ $index{ shift() } } },
-      Name    => sub { shift->{ $index{ shift() } } },
-    ];
+    my @index = ( ImageId => 'col1', Name => 'col2' );
     
     print easy_table(
       data          => $data,
-      rows          => $rows,
+      index         => \@index,
       table_options => { headerText => 'My Easy Table' },
     );
 
@@ -61,6 +56,11 @@ Exports one method `easy_table`.
 
 ## easy\_table
 
+    easy_table(key => value, ...)
+
+Returns a `Text::ASCIITable` object that you can print. Accepts a list
+of key/value pairs described below.
+
 - rows
 
     Array (not hash) of key/value pairs where the key is the name of one
@@ -94,7 +94,38 @@ Exports one method `easy_table`.
 
     Array of hashes that contain the data for the table.
 
+- index
+
+    An array (not a hash) of key/value pairs that define the column name (key)
+    for a key (value) in a hash.
+
+    Suppose your data looks like this:
+
+        [
+          { Subnet    => "subnet-12345678",
+            VpcId     => "vpc-12345678",
+            CidrBlock => "10.1.4.0/24"
+          }
+          ...
+        ]
+
+        print easy_table(
+          table_options => { headingText => 'Subnets' },
+          data          => $data,
+          index         => [ Subnet => 'Subnet', VPC => 'VpcId', IP => 'CidrBlock' ]
+        );
+
+        .----------------------------------------------.
+        |                    Subnets                   |
+        +-----------------+--------------+-------------+
+        | Subnet          | VPC          | IP          |
+        +-----------------+--------------+-------------+
+        | subnet-12345678 | vpc-12345678 | 10.1.4.0/24 |
+        '-----------------+--------------+-------------'
+
 - json
+
+    Boolean that determines if a table or a JSON object should be returned.
 
     Instead of a table, return a JSON representation. The point here, is
     to use the transformation capabilities but rather than rendering a
@@ -138,9 +169,6 @@ Exports one method `easy_table`.
            }
         ]
 
-    - _`easy_table()` is meant to be used on small data sets and may not
-    be efficient when larger data sets are used._
-
 - max\_rows
 
     Maximum number of rows to render.
@@ -161,6 +189,11 @@ appear will be non-deterministic. If you want a specific order, provide
 the `columns` or `rows` parameters. If you just want to see some
 data and don't care about order, you can just send the `data`
 parameter and the method will more or less DWIM._
+
+# CAVEATS
+
+- _`easy_table()` is meant to be used on small data sets and may not
+be efficient when larger data sets are used._
 
 # SEE ALSO
 

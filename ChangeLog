@@ -1,3 +1,11 @@
+Mon May 22 15:37:32 2023  Rob Lauer  <rlauer6@comcast.net>
+
+	[1.003]:
+	* lib/Text/ASCIITable/EasyTable.pm
+	- updated pod
+	(easy_table)
+	- accept new option 'index'
+
 Sat Feb  4 08:25:04 2023  Rob Lauer  <rlauer6@comcast.net>
 
 	[1.002]:

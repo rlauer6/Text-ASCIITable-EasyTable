@@ -7,6 +7,45 @@ previous versions.  If critical bugs are found in any of the software,
 notice of such bugs and the versions in which they were fixed will be
 noted here, as well.
 
+# Text-ASCIITable-EasyTable 1.004 (2023-05-22)
+
+This version introduces a new `index` option that allows you to map
+keys to new columns names.
+
+## Enhancements
+
+* `index` option
+
+## Fixes
+
+* pod corrections, enhancements
+
+# Text-ASCIITable-EasyTable 1.003 (2023-03-29)
+
+This version fixes some errors in pod and introduces a new
+`fix_headings` option to convert snake and camel case keys used as
+column names in phrases.
+
+## Enhancements
+
+* `fix_headings` option
+
+## Fixes
+
+* pod correction
+
+# Text-ASCIITable-EasyTable 1.002 (2023-02-04)
+
+This version fixes version the unit test which did not import `output_from()`.
+
+## Enhancements
+
+* None
+
+## Fixes
+
+* `t/00-easy-table.t` patched to import `output_from()`
+
 # Text-ASCIITable-EasyTable 1.001 (2023-01-26)
 
 This version fixes version numbering and some minor tweaks to the

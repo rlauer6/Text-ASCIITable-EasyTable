@@ -1,16 +1,29 @@
 Mon May 22 15:37:32 2023  Rob Lauer  <rlauer6@comcast.net>
 
-	[1.003]:
+	[1.004]:
 	* lib/Text/ASCIITable/EasyTable.pm
 	- updated pod
 	(easy_table)
 	- accept new option 'index'
 
+Wed Mar 29 09:18:25 2023  Rob Lauer  <rlauer6@comcast.net>
+
+	[1.003 - wordify]:
+	* README.md: generated
+	* NEWS.md: updated
+	* lib/Text/ASCIITable/EasyTable.pm
+	- bump version
+	- fix pod: headingText, not headerText
+	(uncamel): new
+	(wordify): new
+	(_render_table)
+	- fix_headings option to 'wordify' column names
+
 Sat Feb  4 08:25:04 2023  Rob Lauer  <rlauer6@comcast.net>
 
 	[1.002]:
 	* README.md: generated
-	* lib//Text/ASCIITable/EasyTable.pm: bump version
+	* lib/Text/ASCIITable/EasyTable.pm: bump version
 	* t/00-easy-table.t: import output_from()
 
 Thu Jan 26 07:57:38 2023  Rob Lauer  <rlauer6@comcast.net>

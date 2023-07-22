@@ -1,3 +1,13 @@
+Sat Jul 22 10:01:01 2023  Rob Lauer  <rlauer6@comcast.net>
+
+	[1.005]:
+	* lib/Text/ASCIITable/EasyTable.pm
+	- udpated pod
+	(_render_table): add line if empty line
+	(_render_data): push empty array if row is undef
+	* Makefile: fixed requires
+	* t/00-easy-table.t: add test for horizontal line
+
 Mon May 22 15:37:32 2023  Rob Lauer  <rlauer6@comcast.net>
 
 	[1.004]:

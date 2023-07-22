@@ -205,10 +205,11 @@ the `columns` or `rows` parameters. If you just want to see some
 data and don't care about order, you can just send the `data`
 parameter and the method will more or less DWIM._
 
-# CAVEATS
+# HINTS AND TIPS
 
 - _`easy_table()` is meant to be used on small data sets and may not
 be efficient when larger data sets are used._
+- Add undef element to the array of data to create a horizontal line.
 
 # SEE ALSO
 

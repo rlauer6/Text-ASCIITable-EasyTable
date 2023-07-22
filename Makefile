@@ -26,7 +26,7 @@ $(TARBALL): $(PERL_MODULES) $(PERL_SCRIPTS) requires
 	   -t t/ \
 	   -d $(DESCRIPTION) \
 	   -H . \
-	   -D requires \
+	   -D requires
 	cp $$(ls -1rt *.tar.gz | tail -1) $@
 
 README.md: $(PERL_MODULES)

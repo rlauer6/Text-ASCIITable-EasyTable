@@ -7,6 +7,18 @@ previous versions.  If critical bugs are found in any of the software,
 notice of such bugs and the versions in which they were fixed will be
 noted here, as well.
 
+# Text-ASCIITable-EasyTable 1.005 (2023-07-22)
+
+This version allows an undef in the data to create a horizontal line separater
+
+## Enhancements
+
+* add an undef to the data array to force a horizontal line
+
+## Fixes
+
+* None
+
 # Text-ASCIITable-EasyTable 1.004 (2023-05-22)
 
 This version introduces a new `index` option that allows you to map

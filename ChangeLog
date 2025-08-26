@@ -1,8 +1,13 @@
+Tue Aug 26 14:08:30 2025  Rob Lauer  <rlauer6@comcast.net>
+
+	[1.006]:
+	* lib/Text/ASCIITable/EasyTable.pm: remove print statement
+
 Sat Jul 22 10:01:01 2023  Rob Lauer  <rlauer6@comcast.net>
 
 	[1.005]:
 	* lib/Text/ASCIITable/EasyTable.pm
-	- udpated pod
+	- updated pod
 	(_render_table): add line if empty line
 	(_render_data): push empty array if row is undef
 	* Makefile: fixed requires
